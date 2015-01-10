@@ -1,6 +1,6 @@
 name: PvPFriend
 author: Crispy
-description: A Plugin FoEManaging 
+description: A Plugin To Manage FoE
 version: 0.0.1
 main: PvPFriend\Main
 api: [1.4.0]
