@@ -6,7 +6,7 @@ main: PvPFriend\Main
 api: [1.4.0]
 commands:
   pf:
-    description: use /f help for all parameters
+    description: use /pf help for all parameters
     permission: cl.command
 permissions:
   pf.command:
