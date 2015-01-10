@@ -1,14 +1,14 @@
 name: PvPFriend
 author: Crispy
-description: A Plugin For Easily Managing Mods
+description: A Plugin FoEManaging 
 version: 0.0.1
 main: PvPFriend\Main
 api: [1.4.0]
 commands:
   pf:
     description: use /pf help for all parameters
-    permission: cl.command
+    permission: pf.command
 permissions:
   pf.command:
     default: true
-    description: "Allow use of all faction commands"
+    description: "Allow use of all friend commands"
