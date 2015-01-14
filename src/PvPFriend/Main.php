@@ -29,7 +29,7 @@ class Main extends PluginBase  implements Listener {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 		new Config($this->getDataFolder() . "config.yml", CONFIG::YAML, array(
 			"players-in-same-group-are-friendly" => true,
-			"friend-system" => true,
+			"friends-are-friendly" => true,
 		));
 		if(!$this->getServer()->getPluginManager()->getPlugin("PurePerms")) {
 			$this->getLogger()->info( TextFormat::RED . "PurePerms Not Loaded With PvPFriend!" );
@@ -63,7 +63,7 @@ class Main extends PluginBase  implements Listener {
 							$sender->sendMessage("[PvPFriend] You already sent an request to '$friend'");
 							return true;
 						}
-						if($this->getConfig()->get("friend-system") && !file_exists($this->getDataFolder() . "Players/" . $player . ".yml")) {
+						if(!file_exists($this->getDataFolder() . "Players/" . $player . ".yml")) {
 							$this->pcreate = new Config($this->getDataFolder() . "Players/" . $player . ".yml", CONFIG::YAML);
 							$place = "TempFriends";
 							$this->pcreate->setNested($place . "." . $friend,[
@@ -74,7 +74,7 @@ class Main extends PluginBase  implements Listener {
 							$friendexact->sendMessage("[PvPFriend] '$playercase' wants to be your friend!");
 							return true;
 						}
-						if($this->getConfig()->get("friend-system") && file_exists($this->getDataFolder() . "Players/" . $player . ".yml")) {
+						if(file_exists($this->getDataFolder() . "Players/" . $player . ".yml")) {
 							$this->pcreate = new Config($this->getDataFolder() . "Players/" . $player . ".yml", CONFIG::YAML);
 							$place = "TempFriends";
 							$this->pcreate->setNested($place . "." . $friend,[
@@ -82,7 +82,7 @@ class Main extends PluginBase  implements Listener {
         ]);
 							$this->pcreate->save();
 							$sender->sendMessage("[PvPFriend] '$friend' was asked to be your friend.");
-							$friendexact->sendMessage("[PvPFriend] '$playercase' wants to be your friend!");
+							$friendexact->sendMessage("[PvPFriend] '$playercase' wants to be your friend!\nDo \"/friend accept $playercase\" to accept\nOR\nDo \"/friend decline $playercase\" to decline");
 							return true;
 						}
 					}elseif(strtolower($args[0]) == "accept") {
@@ -227,7 +227,7 @@ class Main extends PluginBase  implements Listener {
 		}
 		$friend1 = strtolower($pf->getEntity()->getPlayer()->getName());
 		$friend2 = strtolower($pf->getDamager()->getPlayer()->getName());
-		if($this->getUser($friend1, $friend2) && $this->getConfig()->get("friend-system")) {
+		if($this->getUser($friend1, $friend2) && $this->getConfig()->get("friends-are-friendly")) {
 			$pf->setCancelled(true);
 		}else{
 			return true;
