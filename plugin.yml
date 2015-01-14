@@ -1,14 +1,21 @@
 name: PvPFriend
-author: Crispy
+author: LilCrispy2o9/Angelo Vidrio
 description: A Plugin To Manage FoE
 version: 0.0.1
 main: PvPFriend\Main
-api: [1.4.0]
+api: [1.11.0]
+depends: PurePerms
 commands:
-  pf:
-    description: use /pf help for all parameters
-    permission: pf.command
+  friend:
+    description: use /friend help for all parameters
+    permission: friend.command
+  unfriend:
+    description: use /friend help for all parameters
+    permission: unfriend.command
 permissions:
-  pf.command:
+  friend.command:
+    default: true
+    description: "Allow use of all friend commands"
+  unfriend.command:
     default: true
     description: "Allow use of all friend commands"
