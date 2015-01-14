@@ -227,8 +227,10 @@ class Main extends PluginBase  implements Listener {
 		}
 		$friend1 = strtolower($pf->getEntity()->getPlayer()->getName());
 		$friend2 = strtolower($pf->getDamager()->getPlayer()->getName());
-		if($this->getUser($friend1, $friend2)) {
+		if($this->getUser($friend1, $friend2) && $this->getConfig()->get("friend-system")) {
 			$pf->setCancelled(true);
+		}else{
+			return true;
 		}
 	}
 	public function onPlayerQuitEvent(PlayerQuitEvent $pf){
