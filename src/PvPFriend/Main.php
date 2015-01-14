@@ -22,7 +22,9 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 class Main extends PluginBase  implements Listener {
 	
-
+	
+	public $verify;
+	
     public function onEnable(){
 		@mkdir($this->getDataFolder());
 		@mkdir($this->getDataFolder() . "Players/");
@@ -33,10 +35,11 @@ class Main extends PluginBase  implements Listener {
 		));
 		if(!$this->getServer()->getPluginManager()->getPlugin("PurePerms")) {
 			$this->getLogger()->info( TextFormat::RED . "PurePerms Not Loaded With PvPFriend!" );
-			$this->getServer()->getPluginManager()->disablePlugin($this);
+			$this->verify = false;
 		}else{
 			$this->pure = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
 			$this->getLogger()->info( TextFormat::GREEN . "PurePerms Loaded With PvPFriend!" );
+			$this->verify = true;
 		}
     }
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
@@ -219,11 +222,13 @@ class Main extends PluginBase  implements Listener {
 		}else{
 			return true;
 		}
-		$levelName = null;
-		$groupName = $this->pure->getUser($reciever)->getGroup($levelName)->getName();
-		$groupName2 = $this->pure->getUser($sender)->getGroup($levelName)->getName();
-		if($groupName == $groupName2 && $this->getConfig()->get("players-in-same-group-are-friendly")) {
-			$pf->setCancelled(true);
+		if($this->verify) {
+			$levelName = null;
+			$groupName = $this->pure->getUser($reciever)->getGroup($levelName)->getName();
+			$groupName2 = $this->pure->getUser($sender)->getGroup($levelName)->getName();
+			if($groupName == $groupName2 && $this->getConfig()->get("players-in-same-group-are-friendly")) {
+				$pf->setCancelled(true);
+			}
 		}
 		$friend1 = strtolower($pf->getEntity()->getPlayer()->getName());
 		$friend2 = strtolower($pf->getDamager()->getPlayer()->getName());
