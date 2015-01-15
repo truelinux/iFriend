@@ -2,7 +2,7 @@
 /**
  * author: LilCrispy2o9/Angelo Vidrio
  */
-namespace PvPFriend;
+namespace iFriend;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\command\CommandSender;
@@ -48,22 +48,22 @@ class Main extends PluginBase  implements Listener {
 			$playercase = $sender->getPlayer()->getName();
 				if(strtolower($command->getName()) == "friend") {
 					if(empty($args)) {
-						$sender->sendMessage("[PvPFriend] Usage:\n/friend <player-name>");
+						$sender->sendMessage("[iFriend] Usage:\n/friend <player-name>");
 						return true;
 					}
 					if(strtolower($args[0]) !== "accept" && strtolower($args[0]) !== "decline") {
 						$friend = strtolower($args[0]);
 						$friendexact =  $this->getServer()->getPlayerExact($args[0]);
 						if(!$friendexact instanceof Player) {
-								$sender->sendMessage("[PvPFriend] Player not online!");
+								$sender->sendMessage("[iFriend] Player not online!");
 								return true;
 						}
 						if($this->getUser($player, $friend)) {
-							$sender->sendMessage("[PvPFriend] '$friend' is already your friend!");
+							$sender->sendMessage("[iFriend] '$friend' is already your friend!");
 							return true;
 						}
 						if($this->getUserTEMP($player, $friend)) {
-							$sender->sendMessage("[PvPFriend] You already sent an request to '$friend'");
+							$sender->sendMessage("[iFriend] You already sent an request to '$friend'");
 							return true;
 						}
 						if(!file_exists($this->getDataFolder() . "Players/" . $player . ".yml")) {
@@ -73,8 +73,8 @@ class Main extends PluginBase  implements Listener {
             true,
         ]);
 							$this->pcreate->save();
-							$sender->sendMessage("[PvPFriend] '$friend' was asked to be\n your friend.");
-							$friendexact->sendMessage("[PvPFriend] '$playercase' wants to be your friend!");
+							$sender->sendMessage("[iFriend] '$friend' was asked to be\n your friend.");
+							$friendexact->sendMessage("[iFriend] '$playercase' wants to be your friend!");
 							return true;
 						}
 						if(file_exists($this->getDataFolder() . "Players/" . $player . ".yml")) {
@@ -84,72 +84,72 @@ class Main extends PluginBase  implements Listener {
             true,
         ]);
 							$this->pcreate->save();
-							$sender->sendMessage("[PvPFriend] '$friend' was asked to be your friend.");
-							$friendexact->sendMessage("[PvPFriend] '$playercase' wants to be your friend!\nDo \"/friend accept $playercase\" to accept\nOR\nDo \"/friend decline $playercase\" to decline");
+							$sender->sendMessage("[iFriend] '$friend' was asked to be your friend.");
+							$friendexact->sendMessage("[iFriend] '$playercase' wants to be your friend!\nDo \"/friend accept $playercase\" to accept\nOR\nDo \"/friend decline $playercase\" to decline");
 							return true;
 						}
 					}elseif(strtolower($args[0]) == "accept") {
 						if(empty($args[1])) {
-							$sender->sendMessage("[PvPFriend] Usage:\n/friend [decline/accept] <player-name>");
+							$sender->sendMessage("[iFriend] Usage:\n/friend [decline/accept] <player-name>");
 							return true;
 						}
 						$friendexact =  $this->getServer()->getPlayerExact($args[1]);
 						$getsender = strtolower($args[1]);
 						if($args[0] == "accept") {
 							if(!$friendexact instanceof Player) {
-								$sender->sendMessage("[PvPFriend] Player not online!");
+								$sender->sendMessage("[iFriend] Player not online!");
 								return true;
 							}
 							if(!$this->getUserTEMP($getsender, $player)) {
-								$sender->sendMessage("[PvPFriend] Player has not sent you\n a request!");
+								$sender->sendMessage("[iFriend] Player has not sent you\n a request!");
 								return true;
 							}
 							$playerget = strtolower($sender->getName());
 							$this->removeUserTEMP($getsender, strtolower($sender->getName()));
 							$this->setUser($getsender, $player);
 							$this->setUser($player, $getsender);
-							$sender->sendMessage("[PvPFriend] Request Accepted!");
-							$friendexact->sendMessage("[PvPFriend] Your request to '$player'\nwas accepted!");
+							$sender->sendMessage("[iFriend] Request Accepted!");
+							$friendexact->sendMessage("[iFriend] Your request to '$player'\nwas accepted!");
 							return true;
 						}
 					}else{
 						if($args[0] == "decline") {
 							if(empty($args[1])) {
-								$sender->sendMessage("[PvPFriend] Usage:\n/friend [decline/accept] <player-name>");
+								$sender->sendMessage("[iFriend] Usage:\n/friend [decline/accept] <player-name>");
 								return true;
 							}
 							$friendexact =  $this->getServer()->getPlayerExact($args[1]);
 							$getsender = strtolower($args[1]);
 							if(!$friendexact instanceof Player) {
-								$sender->sendMessage("[PvPFriend] Player not online!");
+								$sender->sendMessage("[iFriend] Player not online!");
 								return true;
 							}
 							if(!$this->getUserTEMP($getsender, $player)) {
-								$sender->sendMessage("[PvPFriend] Player has not sent you\n a request!");
+								$sender->sendMessage("[iFriend] Player has not sent you\n a request!");
 								return true;
 							}
 							$this->removeUserTEMP($getsender, $player);
-							$sender->sendMessage("[PvPFriend] Request Declined!");
-							$friendexact->sendMessage("[PvPFriend] Your request to '$player'\n was declined!");
+							$sender->sendMessage("[iFriend] Request Declined!");
+							$friendexact->sendMessage("[iFriend] Your request to '$player'\n was declined!");
 							return true;
 						}
 					}
 				}
 				if(strtolower($command->getName()) == "unfriend") {
 					if(empty($args)) {
-					$sender->sendMessage("[PvPFriend] Usage:\n/unfriend <player-name>");
+					$sender->sendMessage("[iFriend] Usage:\n/unfriend <player-name>");
 					return true;
 					}
 					$friend = strtolower($args[0]);
 					$friendexact =  $this->getServer()->getPlayerExact($args[0]);
 					if(!$this->getUser($player, $friend)) {
-						$sender->sendMessage("[PvPFriend] '$friend' is not your friend!");
+						$sender->sendMessage("[iFriend] '$friend' is not your friend!");
 						return true;
 					}
 					if($this->getUser($player, $friend)) {
 						$this->removeUser($player, $friend);
 						$this->removeUser($friend, $player);
-						$sender->sendMessage("[PvPFriend] '$friend' is no longer your friend!");
+						$sender->sendMessage("[iFriend] '$friend' is no longer your friend!");
 					}
 				}
 		}
