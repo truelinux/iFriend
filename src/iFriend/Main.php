@@ -34,11 +34,11 @@ class Main extends PluginBase  implements Listener {
 			"friends-are-friendly" => true,
 		));
 		if(!$this->getServer()->getPluginManager()->getPlugin("PurePerms")) {
-			$this->getLogger()->info( TextFormat::RED . "PurePerms Not Loaded With PvPFriend!" );
+			$this->getLogger()->info( TextFormat::RED . "PurePerms Not Loaded With iFriend!" );
 			$this->verify = false;
 		}else{
 			$this->pure = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
-			$this->getLogger()->info( TextFormat::GREEN . "PurePerms Loaded With PvPFriend!" );
+			$this->getLogger()->info( TextFormat::GREEN . "PurePerms Loaded With iFriend!" );
 			$this->verify = true;
 		}
     }
