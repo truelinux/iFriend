@@ -6,10 +6,10 @@ main: iFriend\Main
 api: [1.10.0]
 commands:
   friend:
-    description: use /friend help for all parameters
+    description: Use /friend help for all parameters
     permission: friend.command
   unfriend:
-    description: use /friend help for all parameters
+    description: Use /friend help for all parameters
     permission: unfriend.command
 permissions:
   friend.command:
