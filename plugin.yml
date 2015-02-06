@@ -7,14 +7,22 @@ api: [1.10.0]
 commands:
   friend:
     description: Use /friend help for all parameters
-    permission: friend.command
+    permission: friend.command.friend
   unfriend:
     description: Use /friend help for all parameters
-    permission: unfriend.command
+    permission: friend.command.unfriend
 permissions:
-  friend.command:
-    default: true
-    description: "Allow use of all friend commands"
-  unfriend.command:
-    default: true
-    description: "Allow use of all friend commands"
+  friend:
+    default: false
+    description: "Allow use of all friend features"
+    children:
+      friend.command:
+        default: false
+        description: "Allow use of all friend commands"
+        children:
+          friend.command.friend:
+            default: true
+            description: "Allow use of friend command"
+          friend.command.unfriend:
+            default: true
+            description: "Allow use of unfriend command"
