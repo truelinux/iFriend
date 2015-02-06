@@ -1,7 +1,7 @@
 name: iFriend
 author: LilCrispy2o9/Angelo Vidrio
 description: A Plugin To Manage FoE
-version: 1.0.2
+version: 1.0.3
 main: iFriend\Main
 api: [1.10.0]
 commands:
