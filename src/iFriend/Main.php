@@ -51,7 +51,7 @@ class Main extends PluginBase  implements Listener {
 						$sender->sendMessage("[iFriend] Usage:\n/friend <player-name>");
 						return true;
 					}
-					if(strtolower($args[0]) !== "accept" && strtolower($args[0]) !== "decline") {
+					if(strtolower($args[0]) !== "accept" && strtolower($args[0]) !== "decline" && strtolower($args[0]) !== "tp") {
 						$friend = strtolower($args[0]);
 						$friendexact =  $this->getServer()->getPlayerExact($args[0]);
 						if(!$friendexact instanceof Player) {
@@ -88,13 +88,15 @@ class Main extends PluginBase  implements Listener {
 							$friendexact->sendMessage("[iFriend] '$playercase' wants to be your friend!\nDo \"/friend accept $playercase\" to accept\nOR\nDo \"/friend decline $playercase\" to decline");
 							return true;
 						}
-					}elseif(strtolower($args[0]) == "accept") {
+					}
+					if(strtolower($args[0]) == "accept") {
 						if(empty($args[1])) {
 							$sender->sendMessage("[iFriend] Usage:\n/friend [decline/accept] <player-name>");
 							return true;
 						}
 						$friendexact =  $this->getServer()->getPlayerExact($args[1]);
 						$getsender = strtolower($args[1]);
+						$friendname = $friendexact->getName();
 						if($args[0] == "accept") {
 							if(!$friendexact instanceof Player) {
 								$sender->sendMessage("[iFriend] Player not online!");
@@ -109,50 +111,73 @@ class Main extends PluginBase  implements Listener {
 							$this->setUser($getsender, $player);
 							$this->setUser($player, $getsender);
 							$sender->sendMessage("[iFriend] Request Accepted!");
+							$sender->sendMessage("[iFriend] '$friendname' can now teleport to you.");
 							$friendexact->sendMessage("[iFriend] Your request to '$player'\nwas accepted!");
 							return true;
 						}
-					}else{
-						if($args[0] == "decline") {
-							if(empty($args[1])) {
-								$sender->sendMessage("[iFriend] Usage:\n/friend [decline/accept] <player-name>");
-								return true;
-							}
-							$friendexact =  $this->getServer()->getPlayerExact($args[1]);
-							$getsender = strtolower($args[1]);
-							if(!$friendexact instanceof Player) {
-								$sender->sendMessage("[iFriend] Player not online!");
-								return true;
-							}
-							if(!$this->getUserTEMP($getsender, $player)) {
-								$sender->sendMessage("[iFriend] Player has not sent you\n a request!");
-								return true;
-							}
-							$this->removeUserTEMP($getsender, $player);
-							$sender->sendMessage("[iFriend] Request Declined!");
-							$friendexact->sendMessage("[iFriend] Your request to '$player'\n was declined!");
+					}
+					if(strtolower($args[0]) == "decline") {
+						if(empty($args[1])) {
+							$sender->sendMessage("[iFriend] Usage:\n/friend [decline/accept] <player-name>");
 							return true;
 						}
-					}
-				}
-				if(strtolower($command->getName()) == "unfriend") {
-					if(empty($args)) {
-					$sender->sendMessage("[iFriend] Usage:\n/unfriend <player-name>");
-					return true;
-					}
-					$friend = strtolower($args[0]);
-					$friendexact =  $this->getServer()->getPlayerExact($args[0]);
-					if(!$this->getUser($player, $friend)) {
-						$sender->sendMessage("[iFriend] '$friend' is not your friend!");
+						$friendexact =  $this->getServer()->getPlayerExact($args[1]);
+						$getsender = strtolower($args[1]);
+						if(!$friendexact instanceof Player) {
+							$sender->sendMessage("[iFriend] Player not online!");
+							return true;
+						}
+						if(!$this->getUserTEMP($getsender, $player)) {
+							$sender->sendMessage("[iFriend] Player has not sent you\n a request!");
+							return true;
+						}
+						$this->removeUserTEMP($getsender, $player);
+						$sender->sendMessage("[iFriend] Request Declined!");
+						$friendexact->sendMessage("[iFriend] Your request to '$player'\n was declined!");
 						return true;
 					}
-					if($this->getUser($player, $friend)) {
-						$this->removeUser($player, $friend);
-						$this->removeUser($friend, $player);
-						$sender->sendMessage("[iFriend] '$friend' is no longer your friend!");
+					if(strtolower($args[0]) == "tp") {
+						if(empty($args[1])) {
+							$sender->sendMessage("[iFriend] Usage:\n/friend tp <player-name>");
+							return true;
+						}
+						$friend = strtolower($args[1]);
+						if(!$this->getUser($player, $friend)) {
+							$sender->sendMessage("[iFriend] '$friend' is not your friend!");
+							return true;
+						}
+						$friendexact =  $this->getServer()->getPlayerExact($args[1]);
+						if(!$friendexact instanceof Player) {
+							$sender->sendMessage("[iFriend] Player not online!");
+							return true;
+						}
+						$name = $sender->getName();
+						$friendpos = $this->getServer()->getPlayer($args[1]);
+						$friendname = $friendpos->getName();
+						$sender->teleport($friendpos->getPosition(), $friendpos->getYaw(), $friendpos->getPitch());
+						$sender->sendMessage("Teleporting to '$friendname'...");
+						$friendexact->sendMessage("'$name' has teleported to you.");
+						return true;
 					}
 				}
-		}
+			}
+			if(strtolower($command->getName()) == "unfriend") {
+				if(empty($args)) {
+					$sender->sendMessage("[iFriend] Usage:\n/unfriend <player-name>");
+					return true;
+				}
+				$friend = strtolower($args[0]);
+				$friendexact =  $this->getServer()->getPlayerExact($args[0]);
+				if(!$this->getUser($player, $friend)) {
+					$sender->sendMessage("[iFriend] '$friend' is not your friend!");
+					return true;
+				}
+				if($this->getUser($player, $friend)) {
+					$this->removeUser($player, $friend);
+					$this->removeUser($friend, $player);
+					$sender->sendMessage("[iFriend] '$friend' is no longer your friend!");
+				}
+			}
 	}
 	public function removeUser($player, $playerINF) {
 		$this->pget = new Config($this->getDataFolder() . "Players/" . $player . ".yml", CONFIG::YAML);
@@ -191,7 +216,6 @@ class Main extends PluginBase  implements Listener {
 	}
 	public function getUser($player, $playerINF) {
 		$this->pget = new Config($this->getDataFolder() . "Players/" . $player . ".yml", CONFIG::YAML);
-		$place = "Friends";
 		$v = $this->pget->get($playerINF);
 		if($v) {
 			return true;
