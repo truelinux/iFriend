@@ -3,7 +3,7 @@ author: LilCrispy2o9/Angelo Vidrio
 description: A Plugin To Manage FoE
 version: 1.0.4
 main: iFriend\Main
-api: [1.11.0]
+api: [3.0.0]
 commands:
   friend:
     description: Use /friend help for all parameters
