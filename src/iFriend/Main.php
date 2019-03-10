@@ -56,7 +56,7 @@ class Main extends PluginBase  implements Listener {
             $this->getLogger()->info(TextFormat::GREEN . "Using YML provider.");
         }
     }
-	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+	public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
             if($sender instanceof Player) {
                 $player = strtolower($sender->getName());
                 $pc = $sender->getName();
@@ -201,6 +201,7 @@ class Main extends PluginBase  implements Listener {
                     }
                 }
             }
+		return true;
         }
         public function getAllFriends($p1) {
             if($this->provider == "SQL") {
