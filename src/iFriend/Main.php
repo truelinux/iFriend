@@ -73,7 +73,7 @@ class Main extends PluginBase  implements Listener {
                         $max = $this->getConfig()->get("max-friends");
                         if(count($this->getAllFriends($player)) == $max) {
                             $sender->sendMessage(TextFormat::RED . "[iFriend] You have the max amount of friends!");
-                            return;
+                            return true;
                         }
                         $friendexact =  $this->getServer()->getPlayer($args[0]);
                         if(!$friendexact instanceof Player) {
@@ -172,7 +172,7 @@ class Main extends PluginBase  implements Listener {
                     if(strtolower($args[0]) == "list") {
                         if(!$this->hasFriends($player)) {
                             $sender->sendMessage(TextFormat::RED . "[iFriend] You have no friends!");
-                            return;
+                            return true;
                         }
                         $friends = $a = new Config($this->getDataFolder() . "Players/" . $player . ".yml", CONFIG::YAML);
                         $msg = null;
@@ -182,7 +182,7 @@ class Main extends PluginBase  implements Listener {
                             }
                         } 
                         $sender->sendMessage(TextFormat::GRAY . "Friends: $msg");
-                        return;
+                        return true;
                     }
                 }
                 if(strtolower($command->getName()) == "unfriend") {
